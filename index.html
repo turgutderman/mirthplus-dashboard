@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MirthPlus Team Dashboard</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --teal:#005F5F;--teal-light:#007A7A;--teal-dark:#004A4A;
+  --gold:#C9952B;--gold-light:#D4A94A;--gold-mist:#FBF0D4;
+  --sage:#7A9A6D;--sage-light:#B8CCAD;--sage-mist:#EAF0E6;
+  --neutral-mist:#F0F3F2;--white:#FFFFFF;--charcoal:#2C2C2C;
+  --warm-gray:#6B6B6B;--light-gray:#E8E8E8;
+  --success:#3D8B5E;--warning:#D4883A;--error:#C4504A;--info:#3A7A9B;
+}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#F7F8FA;color:var(--charcoal);line-height:1.5}
+
+/* EMAIL BUTTON */
+.email-bonnie{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;background:var(--gold);color:var(--white);text-decoration:none;border-radius:8px;font-size:13px;font-weight:600;transition:.2s;margin-left:auto}
+.email-bonnie:hover{background:var(--gold-light);color:var(--white)}
+
+/* DASHBOARD */
+#dashboard{display:block}
+header{background:var(--white);border-bottom:3px solid var(--teal);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+header h1{color:var(--teal);font-size:22px;font-weight:700}
+header .tagline{color:var(--gold);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:2px}
+.header-meta{text-align:right;font-size:12px;color:var(--warm-gray)}
+.header-meta .date{font-weight:600;color:var(--teal)}
+
+main{max-width:1280px;margin:0 auto;padding:24px 24px 80px}
+
+/* SECTION */
+.section{margin-bottom:32px}
+.section-title{font-size:16px;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--sage-light);display:flex;align-items:center;gap:8px}
+.section-title .icon{font-size:20px}
+
+/* KPI CARDS */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px}
+.kpi-card{background:var(--white);border-radius:12px;padding:20px;border-left:4px solid var(--teal);box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.kpi-card.gold{border-left-color:var(--gold)}
+.kpi-card.sage{border-left-color:var(--sage)}
+.kpi-card.info{border-left-color:var(--info)}
+.kpi-card.warning{border-left-color:var(--warning)}
+.kpi-card .label{font-size:12px;color:var(--warm-gray);text-transform:uppercase;letter-spacing:1px;font-weight:600}
+.kpi-card .value{font-size:32px;font-weight:700;color:var(--charcoal);margin:4px 0}
+.kpi-card .detail{font-size:12px;color:var(--warm-gray)}
+
+/* PIPELINE */
+.pipeline-row{display:flex;gap:12px;overflow-x:auto;padding-bottom:8px;margin-bottom:16px}
+.pipeline-card{background:var(--white);border-radius:10px;padding:16px;min-width:180px;flex-shrink:0;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.pipeline-card h3{font-size:13px;font-weight:700;color:var(--teal);margin-bottom:8px}
+.stage{display:flex;justify-content:space-between;align-items:center;padding:4px 0;font-size:12px;border-bottom:1px solid var(--neutral-mist)}
+.stage:last-child{border:none}
+.stage .name{color:var(--charcoal)}
+.stage .count{background:var(--sage-mist);color:var(--sage);padding:2px 8px;border-radius:10px;font-weight:600;font-size:11px}
+
+/* CAMPAIGNS */
+.campaign-card{background:var(--white);border-radius:10px;padding:16px 20px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.06);display:flex;align-items:center;gap:16px}
+.campaign-status{width:10px;height:10px;border-radius:50%;background:var(--success);flex-shrink:0}
+.campaign-info h4{font-size:14px;font-weight:600;color:var(--charcoal);margin-bottom:2px}
+.campaign-info .meta{font-size:12px;color:var(--warm-gray)}
+.campaign-stats{margin-left:auto;text-align:right;font-size:12px}
+.campaign-stats .sent{font-weight:700;color:var(--teal)}
+
+/* ASANA TASKS */
+.task-table{width:100%;border-collapse:collapse;background:var(--white);border-radius:10px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.task-table th{background:var(--teal);color:var(--white);font-size:11px;text-transform:uppercase;letter-spacing:1px;padding:12px 16px;text-align:left;font-weight:600}
+.task-table td{padding:10px 16px;font-size:13px;border-bottom:1px solid var(--neutral-mist)}
+.task-table tr:last-child td{border:none}
+.task-table tr:hover td{background:var(--sage-mist)}
+.badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;text-transform:uppercase}
+.badge.overdue{background:#FDECEA;color:var(--error)}
+.badge.due-soon{background:var(--gold-mist);color:var(--warning)}
+.badge.on-track{background:var(--sage-mist);color:var(--sage)}
+.badge.completed{background:#E8F5E9;color:var(--success)}
+.badge.p0{background:var(--error);color:var(--white)}
+.badge.p1{background:var(--warning);color:var(--white)}
+.badge.p2{background:var(--info);color:var(--white)}
+
+/* MANUAL TASKS */
+.manual-section{background:var(--white);border-radius:12px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.manual-section h3{font-size:14px;font-weight:700;color:var(--teal);margin-bottom:12px}
+.manual-task{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--neutral-mist);font-size:13px}
+.manual-task:last-child{border:none}
+.manual-task .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.manual-task .dot.pending{background:var(--warning)}
+.manual-task .dot.in-progress{background:var(--info)}
+.manual-task .dot.done{background:var(--success)}
+.manual-task .text{flex:1}
+.manual-task .date{font-size:11px;color:var(--warm-gray)}
+
+/* CONVERSATIONS */
+.conv-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+.conv-card{background:var(--white);border-radius:10px;padding:14px 16px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.conv-card .name{font-weight:600;color:var(--charcoal);font-size:14px}
+.conv-card .channel{font-size:11px;color:var(--info);font-weight:600}
+.conv-card .preview{font-size:12px;color:var(--warm-gray);margin-top:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.conv-card .time{font-size:11px;color:var(--warm-gray);margin-top:6px}
+
+/* RECENT CONTACTS */
+.contact-chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{background:var(--white);border:1px solid var(--light-gray);border-radius:20px;padding:6px 14px;font-size:12px;display:flex;align-items:center;gap:6px}
+.chip .source{font-size:10px;color:var(--gold);font-weight:600}
+
+/* TABS */
+.tab-bar{display:flex;gap:4px;margin-bottom:16px;background:var(--white);border-radius:10px;padding:4px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.tab{padding:10px 20px;font-size:13px;font-weight:600;color:var(--warm-gray);cursor:pointer;border-radius:8px;transition:.2s}
+.tab.active{background:var(--teal);color:var(--white)}
+.tab:hover:not(.active){background:var(--neutral-mist)}
+.tab-content{display:none}
+.tab-content.active{display:block}
+
+/* FOOTER */
+footer{text-align:center;padding:24px;font-size:12px;color:var(--warm-gray);border-top:1px solid var(--light-gray);margin-top:32px}
+footer strong{color:var(--teal)}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  header{flex-direction:column;gap:8px;text-align:center}
+  .kpi-grid{grid-template-columns:1fr 1fr}
+  .pipeline-row{flex-direction:column}
+  .pipeline-card{min-width:auto}
+}
+</style>
+</head>
+<body>
+
+<!-- DASHBOARD -->
+<div id="dashboard" class="visible">
+<header>
+  <div>
+    <h1>MirthPlus Team Dashboard</h1>
+    <div class="tagline">Trusted Wellness</div>
+  </div>
+  <a href="mailto:bonnie.collins2222@gmail.com?subject=MirthPlus%20Dashboard%20Update%20—%20May%2013%2C%202026" class="email-bonnie">&#9993; Email Bonnie</a>
+  <div class="header-meta">
+    <div class="date">Last Updated: May 13, 2026</div>
+    <div>Updated by Derman via Claude</div>
+  </div>
+</header>
+
+<main>
+
+<!-- ===== TODAY'S CALL AGENDA ===== -->
+<div class="section" style="background:var(--white);border-radius:12px;padding:24px 28px;box-shadow:0 2px 12px rgba(0,0,0,.08);border-left:5px solid var(--teal);margin-bottom:24px">
+  <div class="section-title" style="border-bottom:none;margin-bottom:12px"><span class="icon">&#127909;</span> Today's Call Agenda — May 13, 2026</div>
+  <ol style="list-style:none;padding:0;margin:0;counter-reset:agenda">
+    <li style="padding:10px 0;border-bottom:1px solid var(--neutral-mist);font-size:14px;display:flex;align-items:baseline;gap:10px;counter-increment:agenda">
+      <span style="background:var(--teal);color:var(--white);width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0">1</span>
+      <span><strong style="color:var(--charcoal)">SMS workflow review</strong></span>
+    </li>
+    <li style="padding:10px 0;border-bottom:1px solid var(--neutral-mist);font-size:14px;display:flex;align-items:baseline;gap:10px;counter-increment:agenda">
+      <span style="background:var(--teal);color:var(--white);width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0">2</span>
+      <span><strong style="color:var(--charcoal)">Reviewing this dashboard — any adjustments needed</strong></span>
+    </li>
+    <li style="padding:10px 0;font-size:14px;display:flex;align-items:baseline;gap:10px;counter-increment:agenda">
+      <span style="background:var(--teal);color:var(--white);width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0">3</span>
+      <span><strong style="color:var(--charcoal)">Frances' questions</strong></span>
+    </li>
+    <li style="padding:10px 0;font-size:14px;display:flex;align-items:baseline;gap:10px;counter-increment:agenda">
+      <span style="background:var(--teal);color:var(--white);width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0">4</span>
+      <span><strong style="color:var(--charcoal)">No-name SMS cleanup list</strong> — <a href="https://docs.google.com/spreadsheets/d/1A68PRdochj0AEe2XbR88I7q8LmAC4NFL815jlmCSFI4/edit?gid=517565330#gid=517565330" target="_blank" style="color:var(--info);text-decoration:underline">Open Sheet</a></span>
+    </li>
+    <li style="padding:10px 0;font-size:14px;display:flex;align-items:baseline;gap:10px;counter-increment:agenda">
+      <span style="background:var(--teal);color:var(--white);width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0">5</span>
+      <span><strong style="color:var(--charcoal)">Grüns SMS Campaign</strong></span>
+    </li>
+    <li style="padding:10px 0;border-bottom:1px solid var(--neutral-mist);font-size:14px;display:flex;align-items:baseline;gap:10px;counter-increment:agenda">
+      <span style="background:var(--teal);color:var(--white);width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0">6</span>
+      <span><strong style="color:var(--charcoal)">The updated SMS workflow</strong></span>
+    </li>
+    <li style="padding:10px 0;font-size:14px;display:flex;align-items:baseline;gap:10px;counter-increment:agenda">
+      <span style="background:var(--teal);color:var(--white);width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0">7</span>
+      <span><strong style="color:var(--charcoal)">The social calendar update</strong></span>
+    </li>
+    <li style="padding:10px 0;font-size:14px;display:flex;align-items:baseline;gap:10px;counter-increment:agenda">
+      <span style="background:var(--teal);color:var(--white);width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0">8</span>
+      <span><strong style="color:var(--charcoal)">RSS feed</strong></span>
+    </li>
+    <li style="padding:10px 0;font-size:14px;display:flex;align-items:baseline;gap:10px;counter-increment:agenda">
+      <span style="background:var(--gold);color:var(--white);width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0">&#9733;</span>
+      <span><strong style="color:var(--charcoal)">Tomorrow:</strong> GHL MCP connection with Frances <span style="font-size:12px;color:var(--warm-gray)">— May 14, 2026</span></span>
+    </li>
+  </ol>
+</div>
+
+<!-- ===== BONNIE: DERMAN'S UPDATES ===== -->
+<div class="section" style="background:var(--white);border-radius:12px;padding:24px 28px;box-shadow:0 2px 12px rgba(0,0,0,.08);border-left:5px solid var(--gold);margin-bottom:32px">
+  <div class="section-title" style="border-bottom:none;margin-bottom:12px"><span class="icon">&#9733;</span> Bonnie — Derman's Updates</div>
+  <ul style="list-style:none;padding:0;margin:0">
+    <li style="padding:10px 0;border-bottom:1px solid var(--neutral-mist);font-size:14px;display:flex;align-items:baseline;gap:10px">
+      <span style="color:var(--gold);font-size:16px;line-height:1">&#9679;</span>
+      <span><strong style="color:var(--teal)">Cleaned SMS list through Apollo.io</strong> <span style="font-size:12px;color:var(--warm-gray)">— May 13, 2026</span></span>
+    </li>
+    <li style="padding:10px 0;font-size:14px;display:flex;align-items:baseline;gap:10px">
+      <span style="color:var(--gold);font-size:16px;line-height:1">&#9679;</span>
+      <span><strong style="color:var(--teal)">Cleaning all MirthPlus folder structure</strong> <span style="font-size:12px;color:var(--warm-gray)">— May 13, 2026</span></span>
+    </li>
+  </ul>
+</div>
+
+<!-- ===== GHL OVERVIEW ===== -->
+<div class="section">
+  <div class="section-title"><span class="icon">&#9670;</span> GHL Overview — Key Metrics</div>
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="label">Total Contacts</div>
+      <div class="value">11,997</div>
+      <div class="detail">All contacts in GHL CRM</div>
+    </div>
+    <div class="kpi-card gold">
+      <div class="label">SMS Sent Today</div>
+      <div class="value">258</div>
+      <div class="detail">May 13, 2026</div>
+    </div>
+    <div class="kpi-card">
+      <div class="label">Active Conversations</div>
+      <div class="value">11,906</div>
+      <div class="detail">Total in GHL</div>
+    </div>
+    <div class="kpi-card sage">
+      <div class="label">Active Pipelines</div>
+      <div class="value">7</div>
+      <div class="detail">+ 1 legacy template pipeline</div>
+    </div>
+    <div class="kpi-card info">
+      <div class="label">Active Email Campaigns</div>
+      <div class="value">3</div>
+      <div class="detail">Drip campaigns processing</div>
+    </div>
+    <div class="kpi-card warning">
+      <div class="label">Active Calendars</div>
+      <div class="value">3</div>
+      <div class="detail">Bonnie, Frances, Appointments</div>
+    </div>
+    <div class="kpi-card">
+      <div class="label">Newest Contact</div>
+      <div class="value" style="font-size:18px">Jason Cornell</div>
+      <div class="detail">May 11 via Email 50% Off Form</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== EMAIL CAMPAIGNS ===== -->
+<div class="section">
+  <div class="section-title"><span class="icon">&#9993;</span> Active Email Campaigns</div>
+
+  <div class="campaign-card">
+    <div class="campaign-status"></div>
+    <div class="campaign-info">
+      <h4>MB DROPS EMAIL CAMPAIGN</h4>
+      <div class="meta">Subject: Introducing MB Drops — clarity, one drop at a time</div>
+    </div>
+    <div class="campaign-stats">
+      <div class="sent">456 sent</div>
+      <div>of 12,162 total &bull; 44 failed</div>
+      <div>Status: Processing</div>
+    </div>
+  </div>
+
+  <div class="campaign-card">
+    <div class="campaign-status"></div>
+    <div class="campaign-info">
+      <h4>Introducing MirthPlus</h4>
+      <div class="meta">Subject: Change is good, if it means better wellness for you</div>
+    </div>
+    <div class="campaign-stats">
+      <div class="sent">7,393 sent</div>
+      <div>of 12,492 total &bull; 364 failed</div>
+      <div>Status: Processing</div>
+    </div>
+  </div>
+
+  <div class="campaign-card">
+    <div class="campaign-status"></div>
+    <div class="campaign-info">
+      <h4>Free Sample Campaign 2026 April</h4>
+      <div class="meta">Subject: Here is a good way to start spring... Sample Relief</div>
+    </div>
+    <div class="campaign-stats">
+      <div class="sent">6,058 sent</div>
+      <div>of 12,497 total &bull; 149 failed</div>
+      <div>Status: Processing</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PIPELINES ===== -->
+<div class="section">
+  <div class="section-title"><span class="icon">&#9654;</span> Pipeline Summary</div>
+  <div class="pipeline-row">
+    <div class="pipeline-card">
+      <h3>Wellness Quiz Funnel</h3>
+      <div class="stage"><span class="name">Started</span></div>
+      <div class="stage"><span class="name">Completed</span></div>
+      <div class="stage"><span class="name">Recommended</span></div>
+      <div class="stage"><span class="name">Purchased</span></div>
+      <div class="stage"><span class="name">Repeat</span></div>
+    </div>
+    <div class="pipeline-card">
+      <h3>Free Sample Funnel</h3>
+      <div class="stage"><span class="name">Requested</span></div>
+      <div class="stage"><span class="name">Shipped</span></div>
+      <div class="stage"><span class="name">Nurturing</span></div>
+      <div class="stage"><span class="name">Converted</span></div>
+      <div class="stage"><span class="name">Subscriber</span></div>
+    </div>
+    <div class="pipeline-card">
+      <h3>Abandoned Cart Recovery</h3>
+      <div class="stage"><span class="name">Abandoned</span></div>
+      <div class="stage"><span class="name">Touch 1</span></div>
+      <div class="stage"><span class="name">Touch 2</span></div>
+      <div class="stage"><span class="name">Touch 3</span></div>
+      <div class="stage"><span class="name">Recovered/Lost</span></div>
+    </div>
+    <div class="pipeline-card">
+      <h3>Re-Engagement 2026</h3>
+      <div class="stage"><span class="name">Wave 1 Sent</span></div>
+      <div class="stage"><span class="name">Wave 2 Sent</span></div>
+      <div class="stage"><span class="name">Wave 3 Sent</span></div>
+      <div class="stage"><span class="name">Drip Active</span></div>
+      <div class="stage"><span class="name">Sample Requested</span></div>
+      <div class="stage"><span class="name">Converted</span></div>
+    </div>
+    <div class="pipeline-card">
+      <h3>Win-Back Funnel</h3>
+      <div class="stage"><span class="name">90d Inactive</span></div>
+      <div class="stage"><span class="name">Touch 1</span></div>
+      <div class="stage"><span class="name">Touch 2</span></div>
+      <div class="stage"><span class="name">Reactivated</span></div>
+      <div class="stage"><span class="name">Lost</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ASANA TASKS ===== -->
+<div class="section">
+  <div class="section-title"><span class="icon">&#9745;</span> Asana Task Tracker — MirthPlus Projects</div>
+
+  <!-- Summary KPIs -->
+  <div class="kpi-grid" style="margin-bottom:20px">
+    <div class="kpi-card">
+      <div class="label">Operations</div>
+      <div class="value">35</div>
+      <div class="detail">incomplete of 56 total (21 done)</div>
+    </div>
+    <div class="kpi-card gold">
+      <div class="label">Marketing & Content</div>
+      <div class="value">84</div>
+      <div class="detail">incomplete of 112 total (28 done)</div>
+    </div>
+    <div class="kpi-card sage">
+      <div class="label">Brand & Strategy</div>
+      <div class="value">13</div>
+      <div class="detail">incomplete of 14 total (1 done)</div>
+    </div>
+    <div class="kpi-card info">
+      <div class="label">Product & Shopify</div>
+      <div class="value">13</div>
+      <div class="detail">incomplete of 17 total (4 done)</div>
+    </div>
+  </div>
+
+  <!-- Tabs for each project -->
+  <div class="tab-bar">
+    <div class="tab active" onclick="switchTab('ops')">Operations</div>
+    <div class="tab" onclick="switchTab('mktg')">Marketing</div>
+    <div class="tab" onclick="switchTab('brand')">Brand & Strategy</div>
+    <div class="tab" onclick="switchTab('product')">Product & Shopify</div>
+  </div>
+
+  <!-- OPS TAB -->
+  <div class="tab-content active" id="tab-ops">
+    <table class="task-table">
+      <thead><tr><th>Task</th><th>Assignee</th><th>Due</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>[P0] Test complete quiz-to-email journey</td><td>Unassigned</td><td>Apr 24</td><td><span class="badge overdue">Overdue</span></td></tr>
+        <tr><td>[P1] Schedule all 9 V5 workflow update tasks</td><td>Unassigned</td><td>Apr 25</td><td><span class="badge overdue">Overdue</span></td></tr>
+        <tr><td>[P1] Fix WF-04 dead-end branch (V5 Node 11)</td><td>Unassigned</td><td>Apr 17</td><td><span class="badge overdue">Overdue</span></td></tr>
+        <tr><td>[P1] Update all IF/ELSE conversion checks to dual tags</td><td>Unassigned</td><td>Apr 18</td><td><span class="badge overdue">Overdue</span></td></tr>
+        <tr><td>[P1] Add pre-header text to every email node</td><td>Unassigned</td><td>Apr 24</td><td><span class="badge overdue">Overdue</span></td></tr>
+        <tr><td>[P1] Fix Mirthplus → MirthPlus in ALL From Name fields</td><td>Unassigned</td><td>Apr 28</td><td><span class="badge overdue">Overdue</span></td></tr>
+        <tr><td>[P1] QA all live workflows end-to-end</td><td>Unassigned</td><td>May 2</td><td><span class="badge overdue">Overdue</span></td></tr>
+        <tr><td>[P1] [MB] Build dedicated MB Drops email nurture</td><td>Unassigned</td><td>May 7</td><td><span class="badge overdue">Overdue</span></td></tr>
+        <tr><td>Build WF-09 through WF-14 (6 Quiz Follow-Ups)</td><td>Frances Gomez</td><td>May 9</td><td><span class="badge overdue">Overdue</span></td></tr>
+        <tr><td>[P2] Set up GHL quiz conversion reporting dashboard</td><td>Unassigned</td><td>May 10</td><td><span class="badge overdue">Overdue</span></td></tr>
+        <tr><td>[V5] WF-15 Cart Recovery (2 new nodes)</td><td>Frances Gomez</td><td>No date</td><td><span class="badge due-soon">Pending</span></td></tr>
+        <tr><td>[V5] WF-16 Win-Back Flow (2 new nodes)</td><td>Frances Gomez</td><td>No date</td><td><span class="badge due-soon">Pending</span></td></tr>
+        <tr><td>[V5] WF-05 Post-Purchase (3 new nodes)</td><td>Frances Gomez</td><td>No date</td><td><span class="badge due-soon">Pending</span></td></tr>
+        <tr><td>[V5] WF-01 Re-Engagement (4 new nodes)</td><td>Frances Gomez</td><td>No date</td><td><span class="badge due-soon">Pending</span></td></tr>
+        <tr><td>[V5] WF-06 Welcome Series (trigger change + 2 nodes)</td><td>Frances Gomez</td><td>No date</td><td><span class="badge due-soon">Pending</span></td></tr>
+        <tr><td>[V5] WF-04 Shared Nurture (2 new nodes)</td><td>Frances Gomez</td><td>No date</td><td><span class="badge due-soon">Pending</span></td></tr>
+        <tr><td>[V5] WF-03 Off-Checkout Sample (6 new nodes)</td><td>Frances Gomez</td><td>No date</td><td><span class="badge due-soon">Pending</span></td></tr>
+        <tr><td>[V5] WF-02 Shopify Sample Path (6 new nodes)</td><td>Frances Gomez</td><td>No date</td><td><span class="badge due-soon">Pending</span></td></tr>
+        <tr><td>[V5] WF-07 Social Attribution Tagger (6 new nodes)</td><td>Frances Gomez</td><td>No date</td><td><span class="badge due-soon">Pending</span></td></tr>
+        <tr><td>[FUTURE WF] Free Sample → Buyer Conversion Bridge</td><td>Unassigned</td><td>May 9</td><td><span class="badge overdue">Overdue</span></td></tr>
+        <tr><td>[FUTURE WF] MB Product Introduction Sequence</td><td>Unassigned</td><td>May 16</td><td><span class="badge due-soon">Due Soon</span></td></tr>
+        <tr><td>[FUTURE WF] Review Request Flow (Day 30)</td><td>Unassigned</td><td>May 30</td><td><span class="badge on-track">On Track</span></td></tr>
+        <tr><td>[FUTURE WF] Relief Rub Reorder Reminder</td><td>Unassigned</td><td>May 23</td><td><span class="badge on-track">On Track</span></td></tr>
+        <tr><td>[FUTURE WF] VIP / Loyalty Trigger</td><td>Unassigned</td><td>Jun 6</td><td><span class="badge on-track">On Track</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- MARKETING TAB -->
+  <div class="tab-content" id="tab-mktg">
+    <table class="task-table">
+      <thead><tr><th>Task</th><th>Assignee</th><th>Due</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>[MED] Run Keyword Discovery Prompt #3 (Long-Tail)</td><td>Turgut Derman</td><td>May 13</td><td><span class="badge due-soon">Today</span></td></tr>
+        <tr><td>[MED] Define weekly content email cadence</td><td>Turgut Derman</td><td>May 13</td><td><span class="badge due-soon">Today</span></td></tr>
+        <tr><td>[BLOG] May 14 — How to Read a CBD COA</td><td>Frances Gomez</td><td>May 14</td><td><span class="badge due-soon">Tomorrow</span></td></tr>
+        <tr><td>[HIGH] Publish Pillar Blog Post #1 — Sleep</td><td>Turgut Derman</td><td>May 15</td><td><span class="badge due-soon">Due Soon</span></td></tr>
+        <tr><td>[HIGH] Add referral trigger inside every email</td><td>Turgut Derman</td><td>May 18</td><td><span class="badge on-track">On Track</span></td></tr>
+        <tr><td>[BLOG] May 19 — MB Safety Guide</td><td>Frances Gomez</td><td>May 19</td><td><span class="badge on-track">On Track</span></td></tr>
+        <tr><td>[HIGH] Set up Medium brand account</td><td>Turgut Derman</td><td>May 20</td><td><span class="badge on-track">On Track</span></td></tr>
+        <tr><td>[BLOG] May 20 — Behind the Formula: Relief Rub</td><td>Frances Gomez</td><td>May 20</td><td><span class="badge on-track">On Track</span></td></tr>
+        <tr><td>[BLOG] May 21 — MB Drops vs Capsules vs Troches</td><td>Frances Gomez</td><td>May 21</td><td><span class="badge on-track">On Track</span></td></tr>
+        <tr><td>[MED] Implement Schema Markup (FREE)</td><td>Turgut Derman</td><td>May 22</td><td><span class="badge on-track">On Track</span></td></tr>
+        <tr><td>[MED] Audit existing blog posts for E-E-A-T</td><td>Turgut Derman</td><td>May 22</td><td><span class="badge on-track">On Track</span></td></tr>
+        <tr><td>[BLOG] May 23 — 99.99% Purity Matters</td><td>Frances Gomez</td><td>May 23</td><td><span class="badge on-track">On Track</span></td></tr>
+        <tr><td>[HIGH] Launch Pinterest brand account + boards</td><td>Turgut Derman</td><td>May 25</td><td><span class="badge on-track">On Track</span></td></tr>
+        <tr><td>[HIGH] Publish Pillar Blog Post #2 — Calm</td><td>Turgut Derman</td><td>May 29</td><td><span class="badge on-track">On Track</span></td></tr>
+        <tr><td>[HIGH] Reddit brand presence — r/CBD, r/sleep</td><td>Turgut Derman</td><td>May 31</td><td><span class="badge on-track">On Track</span></td></tr>
+        <tr><td>May Wrap — Metrics review + June plan</td><td>Turgut Derman</td><td>May 31</td><td><span class="badge on-track">On Track</span></td></tr>
+        <tr style="background:#FDECEA"><td colspan="4" style="font-weight:600;color:var(--error)">OVERDUE (need attention)</td></tr>
+        <tr><td>[MED] Run Keyword Discovery Prompt #1 (Core)</td><td>Turgut Derman</td><td>May 8</td><td><span class="badge overdue">Overdue</span></td></tr>
+        <tr><td>[HIGH] Confirm RSS feed at mirthplus.com/feed</td><td>Turgut Derman</td><td>May 6</td><td><span class="badge overdue">Overdue</span></td></tr>
+        <tr><td>[HIGH] Submit RSS feed to Feedly (FREE)</td><td>Turgut Derman</td><td>May 7</td><td><span class="badge overdue">Overdue</span></td></tr>
+        <tr><td>[HIGH] Set up Google Search Console</td><td>Turgut Derman</td><td>May 8</td><td><span class="badge overdue">Overdue</span></td></tr>
+        <tr><td>[HIGH] Submit RSS to Feedspot</td><td>Turgut Derman</td><td>May 8</td><td><span class="badge overdue">Overdue</span></td></tr>
+        <tr><td>[HIGH] Submit RSS to NewsBlur, Inoreader, AllTop</td><td>Turgut Derman</td><td>May 10</td><td><span class="badge overdue">Overdue</span></td></tr>
+        <tr><td>[HIGH] Set up RSS-to-email automation in GHL</td><td>Turgut Derman</td><td>May 10</td><td><span class="badge overdue">Overdue</span></td></tr>
+        <tr><td>[MED] Segment 12K email list</td><td>Turgut Derman</td><td>May 12</td><td><span class="badge overdue">Overdue</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- BRAND TAB -->
+  <div class="tab-content" id="tab-brand">
+    <table class="task-table">
+      <thead><tr><th>Task</th><th>Assignee</th><th>Due</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>DECISION: MB Drops Pricing Review</td><td>Unassigned</td><td>May 7</td><td><span class="badge overdue">Overdue</span></td></tr>
+        <tr><td>DECISION: Paid Ads Strategy — First Channel</td><td>Frances Gomez</td><td>May 15</td><td><span class="badge due-soon">Due Soon</span></td></tr>
+        <tr><td>Monitor MBYC sample follow-up</td><td>Frances Gomez</td><td>May 15</td><td><span class="badge due-soon">Due Soon</span></td></tr>
+        <tr><td>[P2] Research affiliate/influencer program for MB</td><td>Unassigned</td><td>May 15</td><td><span class="badge due-soon">Due Soon</span></td></tr>
+        <tr><td>Analyze Re-Engagement campaign completion</td><td>Frances Gomez</td><td>May 30</td><td><span class="badge on-track">On Track</span></td></tr>
+        <tr><td>DECISION: Budget for LegitScript cert</td><td>Frances Gomez</td><td>May 31</td><td><span class="badge on-track">On Track</span></td></tr>
+        <tr><td>MB ad optimization: Review ROAS</td><td>Frances Gomez</td><td>Jun 15</td><td><span class="badge on-track">On Track</span></td></tr>
+        <tr><td>Quiz conversion analysis</td><td>Frances Gomez</td><td>Jun 15</td><td><span class="badge on-track">On Track</span></td></tr>
+        <tr><td>Re-score Gap Analysis: All 7 dimensions</td><td>Frances Gomez</td><td>Jun 30</td><td><span class="badge on-track">On Track</span></td></tr>
+        <tr><td>RISK: Re-engagement list conversion</td><td>Frances Gomez</td><td>Jun 30</td><td><span class="badge on-track">On Track</span></td></tr>
+        <tr><td>Revenue milestone: $5,600/mo by August</td><td>Frances Gomez</td><td>Aug 31</td><td><span class="badge on-track">On Track</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- PRODUCT TAB -->
+  <div class="tab-content" id="tab-product">
+    <table class="task-table">
+      <thead><tr><th>Task</th><th>Assignee</th><th>Due</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>[P0] Optimize MB Drops Shopify product page</td><td>Unassigned</td><td>Apr 26</td><td><span class="badge overdue">Overdue</span></td></tr>
+        <tr><td>[P1] Add MB Drops to homepage featured products</td><td>Unassigned</td><td>Apr 25</td><td><span class="badge overdue">Overdue</span></td></tr>
+        <tr><td>[P1] Map quiz outcomes → MB Drops recommendations</td><td>Unassigned</td><td>Apr 26</td><td><span class="badge overdue">Overdue</span></td></tr>
+        <tr><td>[P1] Create dedicated MB Drops landing page</td><td>Unassigned</td><td>Apr 28</td><td><span class="badge overdue">Overdue</span></td></tr>
+        <tr><td>[P1] Set up MB Drops bundle offer</td><td>Unassigned</td><td>May 7</td><td><span class="badge overdue">Overdue</span></td></tr>
+        <tr><td>[P2] Add review request automation for MB</td><td>Unassigned</td><td>May 10</td><td><span class="badge overdue">Overdue</span></td></tr>
+        <tr><td>[P2] Shopify analytics review — quiz funnel</td><td>Unassigned</td><td>May 10</td><td><span class="badge overdue">Overdue</span></td></tr>
+        <tr><td>First subscription push: PP-04 attach rate</td><td>Frances Gomez</td><td>Jun 15</td><td><span class="badge on-track">On Track</span></td></tr>
+        <tr><td>CRO Experiment 1: Sticky add-to-cart</td><td>Frances Gomez</td><td>Jun 30</td><td><span class="badge on-track">On Track</span></td></tr>
+        <tr><td>Subscription growth: 10-20 active by Aug</td><td>Frances Gomez</td><td>Aug 31</td><td><span class="badge on-track">On Track</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ===== MANUAL TASK LOG ===== -->
+<div class="section">
+  <div class="section-title"><span class="icon">&#9998;</span> Manual Task Log (Updated by Derman)</div>
+  <div class="manual-section">
+    <h3>Daily Updates — May 13, 2026</h3>
+    <div class="manual-task"><div class="dot in-progress"></div><div class="text">Dashboard created for Bonnie & Frances team tracking</div><div class="date">May 13</div></div>
+    <div class="manual-task"><div class="dot pending"></div><div class="text">V5 workflow updates still pending — Frances to complete</div><div class="date">Ongoing</div></div>
+    <div class="manual-task"><div class="dot pending"></div><div class="text">MB Drops product page optimization — needs assignment</div><div class="date">Overdue</div></div>
+    <div class="manual-task"><div class="dot in-progress"></div><div class="text">SMS welcome sequence running — automated via GHL</div><div class="date">Active</div></div>
+    <div class="manual-task"><div class="dot done"></div><div class="text">Brand Persona V2.0, Voice V2.0, Typography V2.0, Color V2.0 — all finalized</div><div class="date">Completed</div></div>
+    <div class="manual-task"><div class="dot done"></div><div class="text">Strategic Blueprint V1.0 — 9-month roadmap approved</div><div class="date">Completed</div></div>
+    <div class="manual-task"><div class="dot done"></div><div class="text">Competitor Review V2.0 — dual-axis framework complete</div><div class="date">Completed</div></div>
+    <div class="manual-task"><div class="dot done"></div><div class="text">Gap Analysis V1.0 — 13 competitors × 7 dimensions mapped</div><div class="date">Completed</div></div>
+    <div class="manual-task"><div class="dot done"></div><div class="text">GHL MCP connection set up — all 21 scopes enabled</div><div class="date">Completed</div></div>
+    <div class="manual-task"><div class="dot done"></div><div class="text">Tagline finalized: "Trusted Wellness." + "Less noise. More mirth."</div><div class="date">Completed</div></div>
+  </div>
+</div>
+
+<!-- ===== RECENT SMS OUTREACH ===== -->
+<div class="section">
+  <div class="section-title"><span class="icon">&#128172;</span> Recent SMS Outreach (Top 10)</div>
+  <div class="conv-list">
+    <div class="conv-card"><div class="name">Mike Benz</div><div class="channel">SMS &bull; Outbound</div><div class="preview">Relief Rub emu oil outreach — free sample offer</div><div class="time">May 13, 2026</div></div>
+    <div class="conv-card"><div class="name">Dallas Tippie</div><div class="channel">SMS &bull; Outbound</div><div class="preview">Relief Rub emu oil outreach — free sample offer</div><div class="time">May 13, 2026</div></div>
+    <div class="conv-card"><div class="name">Marion Thurston</div><div class="channel">SMS &bull; Outbound</div><div class="preview">Relief Rub emu oil outreach — free sample offer</div><div class="time">May 13, 2026</div></div>
+    <div class="conv-card"><div class="name">Colleen Carroll</div><div class="channel">SMS &bull; Outbound</div><div class="preview">Relief Rub emu oil outreach — free sample offer</div><div class="time">May 13, 2026</div></div>
+    <div class="conv-card"><div class="name">Kelvin Chang</div><div class="channel">SMS &bull; Outbound</div><div class="preview">Relief Rub emu oil outreach — free sample offer</div><div class="time">May 13, 2026</div></div>
+    <div class="conv-card"><div class="name">Matt Meisner</div><div class="channel">SMS &bull; Outbound</div><div class="preview">Relief Rub emu oil outreach — free sample offer</div><div class="time">May 13, 2026</div></div>
+    <div class="conv-card"><div class="name">Nancy Cowie</div><div class="channel">SMS &bull; Outbound</div><div class="preview">Relief Rub emu oil outreach — free sample offer</div><div class="time">May 13, 2026</div></div>
+    <div class="conv-card"><div class="name">April Mittelstet</div><div class="channel">SMS &bull; Outbound</div><div class="preview">Relief Rub emu oil outreach — free sample offer</div><div class="time">May 13, 2026</div></div>
+  </div>
+</div>
+
+</main>
+
+<footer>
+  <strong>MirthPlus Team Dashboard</strong> &bull; Trusted Wellness &bull; Last updated May 13, 2026 by Derman via Claude<br>
+  Password: Shared with Bonnie &amp; Frances only. Ask Derman to update this dashboard anytime.
+</footer>
+</div>
+
+<script>
+// Tab switching
+function switchTab(id){
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+</script>
+</body>
+</html>
