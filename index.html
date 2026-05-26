@@ -87,16 +87,20 @@ main{max-width:1280px;margin:0 auto;padding:24px 24px 80px}
 .status-date{font-size:11px;color:var(--warm-gray);white-space:nowrap}
 
 /* TABS */
-.tab-bar{display:flex;gap:4px;margin:24px 0 16px;background:var(--white);border-radius:10px;padding:4px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
-.tab{padding:10px 20px;font-size:13px;font-weight:600;color:var(--warm-gray);cursor:pointer;border-radius:8px;transition:.2s}
-.tab.active{background:var(--teal);color:var(--white)}
-.tab:hover:not(.active){background:var(--neutral-mist)}
+.tab-bar{display:flex;gap:6px;margin:24px 0 16px;background:var(--teal-dark);border-radius:12px;padding:6px;box-shadow:0 4px 12px rgba(0,95,95,.15)}
+.tab{padding:12px 24px;font-size:14px;font-weight:700;color:#fff;cursor:pointer;border-radius:8px;transition:.2s;flex:1;text-align:center;letter-spacing:.3px;border:1px solid transparent}
+.tab-overview{background:#9B7420}
+.tab-overview:hover,.tab-overview.active{background:var(--gold);box-shadow:0 2px 8px rgba(201,149,43,.4);border-color:var(--gold-light)}
+.tab-ghl{background:#5A7E50}
+.tab-ghl:hover,.tab-ghl.active{background:var(--sage);box-shadow:0 2px 8px rgba(122,154,109,.4);border-color:var(--sage-light)}
+.tab-asana{background:#004A4A}
+.tab-asana:hover,.tab-asana.active{background:var(--teal);box-shadow:0 2px 8px rgba(0,95,95,.4);border-color:var(--teal-light)}
 .tab-panel{display:none}
 .tab-panel.active{display:block}
 
 /* KPI CARDS */
 .kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px}
-.kpi-card{background:var(--white);border-radius:12px;padding:20px;border-left:4px solid var(--teal);box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.kpi-card{background:var(--white);border-radius:12px;padding:20px;border-left:4px solid var(--teal);box-shadow:0 2px 8px rgba(0,95,95,.06);transition:.2s}
 .kpi-card.gold{border-left-color:var(--gold)}
 .kpi-card.sage{border-left-color:var(--sage)}
 .kpi-card.info{border-left-color:var(--info)}
@@ -109,19 +113,19 @@ main{max-width:1280px;margin:0 auto;padding:24px 24px 80px}
 .kpi-card .detail{font-size:12px;color:var(--warm-gray)}
 
 /* PROJECT HEALTH */
-.proj-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-bottom:24px}
-.proj-card{background:var(--white);border-radius:12px;padding:18px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
-.proj-card h4{font-size:13px;font-weight:700;color:var(--teal);margin-bottom:8px}
-.proj-bar{height:8px;background:var(--neutral-mist);border-radius:4px;overflow:hidden;margin-bottom:4px}
-.proj-fill{height:100%;background:var(--teal);border-radius:4px;transition:width .5s}
-.proj-stats{font-size:11px;color:var(--warm-gray);display:flex;justify-content:space-between}
+.proj-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:24px}
+.proj-card{background:var(--white);border-radius:12px;padding:18px;box-shadow:0 2px 8px rgba(0,95,95,.06);border-top:4px solid var(--teal)}
+.proj-card h4{font-size:14px;font-weight:700;color:var(--teal-dark);margin-bottom:8px}
+.proj-bar{height:8px;background:var(--neutral-mist);border-radius:4px;overflow:hidden;margin-bottom:6px}
+.proj-fill{height:100%;background:var(--success);border-radius:4px;transition:width .5s}
+.proj-stats{font-size:12px;color:var(--warm-gray);display:flex;justify-content:space-between}
 
 /* TASK TABLE */
-.task-table{width:100%;border-collapse:collapse;background:var(--white);border-radius:10px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06);margin-bottom:20px}
-.task-table th{background:var(--teal);color:var(--white);font-size:11px;text-transform:uppercase;letter-spacing:1px;padding:12px 16px;text-align:left;font-weight:600}
+.task-table{width:100%;border-collapse:collapse;background:var(--white);border-radius:10px;overflow:hidden;box-shadow:0 2px 8px rgba(0,95,95,.06);margin-bottom:20px}
+.task-table th{background:var(--teal-dark);color:#fff;font-size:11px;text-transform:uppercase;letter-spacing:1px;padding:12px 16px;text-align:left;font-weight:600}
 .task-table td{padding:10px 16px;font-size:13px;border-bottom:1px solid var(--neutral-mist)}
 .task-table tr:last-child td{border:none}
-.task-table tr:hover td{background:var(--sage-mist)}
+.task-table tr:hover td{background:var(--teal-mist)}
 .badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;text-transform:uppercase}
 .badge.overdue{background:#FDECEA;color:var(--error)}
 .badge.due-soon{background:var(--gold-mist);color:var(--warning)}
@@ -129,8 +133,8 @@ main{max-width:1280px;margin:0 auto;padding:24px 24px 80px}
 
 /* PIPELINE */
 .pipeline-row{display:flex;gap:12px;overflow-x:auto;padding-bottom:8px;margin-bottom:16px}
-.pipeline-card{background:var(--white);border-radius:10px;padding:16px;min-width:160px;flex:1;box-shadow:0 2px 8px rgba(0,0,0,.06);text-align:center}
-.pipeline-card h4{font-size:12px;font-weight:700;color:var(--teal);margin-bottom:4px}
+.pipeline-card{background:var(--white);border-radius:10px;padding:16px;min-width:160px;flex:1;box-shadow:0 2px 8px rgba(0,95,95,.06);text-align:center;border-top:3px solid var(--sage)}
+.pipeline-card h4{font-size:12px;font-weight:700;color:var(--teal-dark);margin-bottom:4px}
 .pipeline-card .prob{font-size:11px;color:var(--warm-gray)}
 
 /* TAGS CLOUD */
@@ -220,9 +224,9 @@ footer strong{color:var(--teal)}
 </div>
 
 <div class="tab-bar" id="main-tabs">
-  <div class="tab active" data-tab="overview">Overview</div>
-  <div class="tab" data-tab="ghl">GHL CRM</div>
-  <div class="tab" data-tab="asana">Asana Tasks</div>
+  <div class="tab tab-overview active" data-tab="overview">Overview</div>
+  <div class="tab tab-ghl" data-tab="ghl">GHL CRM</div>
+  <div class="tab tab-asana" data-tab="asana">Asana Tasks</div>
 </div>
 
 <div class="tab-panel active" id="panel-overview">
