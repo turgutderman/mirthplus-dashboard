@@ -21,6 +21,18 @@ export default async function handler(req, res) {
   const in14Days = new Date(Date.now() + 14 * 86400000).toISOString().split('T')[0];
 
   try {
+    // Debug: test token by fetching first project
+    const testRes = await fetch(`${BASE}/projects/${MY_PROJECT_GIDS[0]}?opt_fields=name`, { headers });
+    const testData = await testRes.json();
+
+    if (testData.errors) {
+      return res.status(401).json({
+        error: 'Asana token issue',
+        detail: testData.errors,
+        tokenPrefix: ASANA_TOKEN.substring(0, 6) + '...'
+      });
+    }
+
     const projectPromises = MY_PROJECT_GIDS.map(gid =>
       fetch(`${BASE}/projects/${gid}?opt_fields=name,task_counts`, { headers })
         .then(r => r.json())
@@ -79,7 +91,7 @@ export default async function handler(req, res) {
       fetchedAt: new Date().toISOString()
     };
 
-    res.setHeader('Cache-Control', 's-maxage=3600, stale-while-revalidate=600');
+    res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate=30');
     return res.status(200).json(result);
 
   } catch (err) {
