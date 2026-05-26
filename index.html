@@ -413,7 +413,7 @@ function renderAgenda() {
   items.forEach((item, i) => {
     const obj = typeof item === 'string' ? {text:item} : item;
     obj._idx = i;
-    obj._checked = saved[i] === true || obj.completed === true;
+    obj._checked = obj.asanaGid ? (obj.completed === true) : (saved[i] === true);
     if (obj._checked) completedItems.push(obj);
     else currentItems.push(obj);
   });
