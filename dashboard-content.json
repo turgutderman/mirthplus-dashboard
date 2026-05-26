@@ -1,0 +1,33 @@
+{
+  "lastUpdatedBy": "Derman via Claude",
+  "lastUpdated": "2026-05-25",
+  "announcement": {
+    "show": true,
+    "type": "success",
+    "text": "Dashboard upgraded to live data — GHL + Asana refresh automatically."
+  },
+  "callAgenda": {
+    "date": "2026-05-25",
+    "items": []
+  },
+  "pinnedNotes": [
+    {
+      "title": "Dashboard Live",
+      "text": "GHL contacts, pipeline, and Asana tasks now pull automatically every 5 minutes.",
+      "date": "2026-05-25"
+    },
+    {
+      "title": "Auto-Publish Active",
+      "text": "Dashboard content can now be updated by dictating to Claude — no terminal or git needed.",
+      "date": "2026-05-25"
+    }
+  ],
+  "statusUpdates": [
+    {
+      "project": "MirthPlus Dashboard",
+      "status": "green",
+      "note": "Vercel serverless API routes deployed. GHL + Asana data flowing. Auto-publish endpoint active.",
+      "date": "2026-05-25"
+    }
+  ]
+}
