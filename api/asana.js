@@ -21,13 +21,13 @@ export default async function handler(req, res) {
   const in14Days = new Date(Date.now() + 14 * 86400000).toISOString().split('T')[0];
 
   try {
-    const projectsRes = await fetch(
-      `${BASE}/projects?workspace=${process.env.ASANA_WORKSPACE_GID}&opt_fields=name,task_counts&limit=50`,
-      { headers }
+    const projectPromises = MY_PROJECT_GIDS.map(gid =>
+      fetch(`${BASE}/projects/${gid}?opt_fields=name,task_counts`, { headers })
+        .then(r => r.json())
+        .then(r => r.data || null)
+        .catch(() => null)
     );
-    const projectsData = await projectsRes.json();
-    const allProjects = projectsData.data || [];
-    const myProjects = allProjects.filter(p => MY_PROJECT_GIDS.includes(p.gid));
+    const myProjects = (await Promise.all(projectPromises)).filter(Boolean);
 
     const taskPromises = MY_PROJECT_GIDS.map(gid =>
       fetch(
