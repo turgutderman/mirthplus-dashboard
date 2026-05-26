@@ -17,7 +17,8 @@
 body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--neutral-mist);color:var(--charcoal);line-height:1.5}
 
 /* HEADER */
-header{background:var(--white);border-bottom:3px solid var(--teal);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+header{background:var(--white);border-bottom:3px solid var(--teal);padding:16px 32px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.header-inner{max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;width:100%}
 header h1{color:var(--teal);font-size:22px;font-weight:700}
 header h1 .plus{color:var(--gold)}
 header .tagline{color:var(--gold);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:2px}
@@ -186,14 +187,16 @@ footer strong{color:var(--teal)}
 <body>
 
 <header>
-  <div>
-    <h1>Mirth<span class="plus">Plus</span> — Command Dashboard</h1>
-    <div class="tagline">Trusted Wellness</div>
-  </div>
-  <a href="https://sailpin-dashboard.vercel.app/" target="_blank" class="email-btn" style="background:#FFD700;gap:10px;color:#333"><svg width="22" height="22" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16 3L8 18h16L16 3z" fill="#1B4F8A"/><path d="M16 18v8" stroke="#E8603A" stroke-width="2.5" stroke-linecap="round"/><circle cx="16" cy="28" r="2.5" fill="#E8603A"/></svg><span style="letter-spacing:-.3px"><span style="color:#fff">sail</span><span style="color:#E8603A">pin</span></span></a>
-  <div class="header-meta">
-    <div class="date" id="header-date">Loading...</div>
-    <div id="header-by">Derman via Claude</div>
+  <div class="header-inner">
+    <div>
+      <h1>Mirth<span class="plus">Plus</span> — Command Dashboard</h1>
+      <div class="tagline">Trusted Wellness</div>
+    </div>
+    <a href="https://sailpin-dashboard.vercel.app/" target="_blank" class="email-btn" style="background:#FFD700;gap:10px;color:#333"><svg width="22" height="22" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16 3L8 18h16L16 3z" fill="#1B4F8A"/><path d="M16 18v8" stroke="#E8603A" stroke-width="2.5" stroke-linecap="round"/><circle cx="16" cy="28" r="2.5" fill="#E8603A"/></svg><span style="letter-spacing:-.3px"><span style="color:#fff">sail</span><span style="color:#E8603A">pin</span></span></a>
+    <div class="header-meta">
+      <div class="date" id="header-date">Loading...</div>
+      <div id="header-by">Derman via Claude</div>
+    </div>
   </div>
 </header>
 
@@ -413,7 +416,7 @@ function renderAgenda() {
   items.forEach((item, i) => {
     const obj = typeof item === 'string' ? {text:item} : item;
     obj._idx = i;
-    obj._checked = obj.asanaGid ? (obj.completed === true) : (saved[i] === true);
+    obj._checked = saved[i] === true || obj.completed === true;
     if (obj._checked) completedItems.push(obj);
     else currentItems.push(obj);
   });
