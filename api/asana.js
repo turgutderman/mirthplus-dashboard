@@ -9,6 +9,8 @@ const SAILPIN_PROJECT_GIDS = [
   '1213948223663267'  // SailPin: Marketing & Content
 ];
 
+const WORKSPACE_GID = '1209369343885509';
+
 export default async function handler(req, res) {
   const ASANA_TOKEN = process.env.ASANA_TOKEN;
   const BASE = 'https://app.asana.com/api/1.0';
@@ -27,8 +29,9 @@ export default async function handler(req, res) {
 
   try {
     // Fetch projects with task counts
+    const wsGid = process.env.ASANA_WORKSPACE_GID || WORKSPACE_GID;
     const projectsRes = await fetch(
-      `${BASE}/projects?workspace=${process.env.ASANA_WORKSPACE_GID}&opt_fields=name,task_counts&limit=50`,
+      `${BASE}/projects?workspace=${wsGid}&opt_fields=name,task_counts&limit=50`,
       { headers }
     );
     const projectsData = await projectsRes.json();
