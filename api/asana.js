@@ -9,8 +9,6 @@ const SAILPIN_PROJECT_GIDS = [
   '1213948223663267'  // SailPin: Marketing & Content
 ];
 
-const WORKSPACE_GID = '1209369343885509';
-
 export default async function handler(req, res) {
   const ASANA_TOKEN = process.env.ASANA_TOKEN;
   const BASE = 'https://app.asana.com/api/1.0';
@@ -28,27 +26,29 @@ export default async function handler(req, res) {
   const in14Days = new Date(Date.now() + 14 * 86400000).toISOString().split('T')[0];
 
   try {
-    // Fetch projects with task counts
-    const wsGid = process.env.ASANA_WORKSPACE_GID || WORKSPACE_GID;
-    const projectsRes = await fetch(
-      `${BASE}/projects?workspace=${wsGid}&opt_fields=name,task_counts&limit=50`,
-      { headers }
+    // Fetch projects individually to get reliable task_counts
+    const projectPromises = SAILPIN_PROJECT_GIDS.map(gid =>
+      fetch(
+        `${BASE}/projects/${gid}?opt_fields=name,task_counts`,
+        { headers }
+      ).then(r => r.json())
     );
-    const projectsData = await projectsRes.json();
-    const allProjects = (projectsData.data || []);
-    const sailpinProjects = allProjects.filter(p => SAILPIN_PROJECT_GIDS.includes(p.gid));
+    const projectResults = await Promise.allSettled(projectPromises);
+    const sailpinProjects = projectResults
+      .filter(r => r.status === 'fulfilled' && r.value?.data)
+      .map(r => r.value.data);
 
-    // Fetch overdue tasks (due before today, not completed) across SailPin projects
-    const overduePromises = SAILPIN_PROJECT_GIDS.map(gid =>
+    // Fetch incomplete tasks across SailPin projects
+    const taskPromises = SAILPIN_PROJECT_GIDS.map(gid =>
       fetch(
         `${BASE}/tasks?project=${gid}&completed_since=now&opt_fields=name,due_on,assignee.name,completed,memberships.project.name&limit=100`,
         { headers }
       ).then(r => r.json())
     );
-    const overdueResults = await Promise.all(overduePromises);
+    const taskResults = await Promise.all(taskPromises);
 
-    // Combine and filter
-    const allTasks = overdueResults.flatMap(r => r.data || []);
+    // Combine and deduplicate
+    const allTasks = taskResults.flatMap(r => r.data || []);
     const uniqueTasks = [...new Map(allTasks.map(t => [t.gid, t])).values()];
 
     const overdueTasks = uniqueTasks
