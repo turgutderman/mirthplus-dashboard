@@ -10,10 +10,16 @@
     "date": "2026-05-25",
     "items": [
       {
-        "text": "Who to send the RSS https://www.youtube.com/watch?v=74BzSTQCl_c",
+        "text": "Who to send the RSS: https://www.youtube.com/watch?v=74BzSTQCl_c",
         "asanaGid": "1215777498126022",
         "date": null,
         "permalink": "https://app.asana.com/1/1209369343885509/project/1214978656234047/task/1215777498126022"
+      },
+      {
+        "text": "Notion setup",
+        "asanaGid": "1215802597575099",
+        "date": null,
+        "permalink": "https://app.asana.com/1/1209369343885509/project/1214978656234047/task/1215802597575099"
       },
       {
         "text": "Hermes: https://hermes-agent.org/",
@@ -22,10 +28,16 @@
         "permalink": "https://app.asana.com/1/1209369343885509/project/1214978656234047/task/1215802597575095"
       },
       {
-        "text": "Claude Marketplace",
+        "text": "Notion Marketplace",
         "asanaGid": "1215776924328575",
         "date": null,
         "permalink": "https://app.asana.com/1/1209369343885509/project/1214978656234047/task/1215776924328575"
+      },
+      {
+        "text": "Explore interests",
+        "asanaGid": "1215802597575101",
+        "date": null,
+        "permalink": "https://app.asana.com/1/1209369343885509/project/1214978656234047/task/1215802597575101"
       },
       {
         "text": "@bonnie: WP just announced this: https://wordpress.com/workspace/?ref=blog",
