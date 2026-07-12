@@ -1,4 +1,4 @@
-const ASANA_PROJECT_GID = '1214978656234047'; // Dashboard Agenda
+const ASANA_PROJECT_GID = '1216491341284847'; // Agenda
 const REPO = 'turgutderman/mirthplus-dashboard';
 const FILE_PATH = 'dashboard-content.json';
 
